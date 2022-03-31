@@ -1,4 +1,4 @@
-name: Jekyll site CI
+name: deploy-on-s3
 
 on:
   push:
@@ -6,12 +6,41 @@ on:
     
 jobs:
   build:
-
-    runs-on: ubuntu-latest
-
+    runs-on: self-hosted
     steps:
     - uses: actions/checkout@v3
-    - name: Build the site in the jekyll/builder container
+    - name: Build the site on self-hosted runner on ec-2
       run: |
-        echo "Running the shell script"
-        sh ./script.sh 
+       echo "Build stage started"
+       echo "Building the application"
+
+  deploy:
+    runs-on: self-hosted
+    steps:
+    - uses: actions/checkout@v3
+    - name: Deploy the website to S3
+      run: echo "Deploy stage started"
+    - name: Deploying
+      run: |
+        echo "Deploying the application"
+
+
+  stage:
+    runs-on: self-hosted
+    steps:
+    - uses: actions/checkout@main
+    - name: copy to s3 
+      run: |
+       aws s3 sync . "$AWS_S3_BUCKET"
+       echo "file Updated"
+       aws cloudfront create-invalidation --distribution-id "$CLOUDFRONT_ID" --paths '/*'
+       echo "Website updated"
+  #  - name: Invalidation request   
+   #   run: |
+         
+
+      env:
+       AWS_S3_BUCKET: ${{ secrets.AWS_S3_BUCKET }}
+       AWS_ACCESS_KEY: ${{ secrets.AWS_ACCESS_KEY }}
+       AWS_SECRET_KEY: ${{ secrets.AWS_SECRET_KEY }}
+       #CLOUDFRONT_ID: ${{secrets.CLOUDFRONT_ID}}
