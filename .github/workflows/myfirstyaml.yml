@@ -27,6 +27,11 @@ jobs:
 
   stage:
     runs-on: self-hosted
+    env:
+       AWS_S3_BUCKET: ${{ secrets.AWS_S3_BUCKET }}
+       AWS_ACCESS_KEY: ${{ secrets.AWS_ACCESS_KEY }}
+       AWS_SECRET_KEY: ${{ secrets.AWS_SECRET_KEY }}
+       #CLOUDFRONT_ID: ${{secrets.CLOUDFRONT_ID}}
     steps:
     - uses: actions/checkout@main
     - name: copy to s3 
@@ -39,8 +44,4 @@ jobs:
    #   run: |
          
 
-      env:
-       AWS_S3_BUCKET: ${{ secrets.AWS_S3_BUCKET }}
-       AWS_ACCESS_KEY: ${{ secrets.AWS_ACCESS_KEY }}
-       AWS_SECRET_KEY: ${{ secrets.AWS_SECRET_KEY }}
-       #CLOUDFRONT_ID: ${{secrets.CLOUDFRONT_ID}}
+      
