@@ -33,7 +33,7 @@ jobs:
        AWS_SECRET_KEY: ${{ secrets.AWS_SECRET_KEY }}
        #CLOUDFRONT_ID: ${{secrets.CLOUDFRONT_ID}}
     steps:
-    - uses: actions/checkout@main
+    - uses: actions/checkout@v3
     - name: copy to s3 
       run: |
        aws s3 sync . "$AWS_S3_BUCKET"
